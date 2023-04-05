@@ -1,0 +1,23 @@
+dog_api:
+  url: https://api.thedogapi.com/v1
+
+cat_api:
+  url: https://api.thecatapi.com/v1
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    auditing:
+      dateTimeProvider: org.springframework.data.jpa.repository.support.JpaDateTimeProvider
+      audit-locations: com.teste.animaladoption.entities
+      createdDate-attribute: createdAt
+    hibernate:
+      ddl-auto: update
+      hbm2ddl:
+        auto: create
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: true
