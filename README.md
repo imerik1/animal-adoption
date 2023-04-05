@@ -61,5 +61,5 @@ database.
 
 [Postman](https://documenter.getpostman.com/view/14567989/2s93RXsASL)
 
-[Swagger](https://animal-adoption.onrender.com/swagger-ui/index.html#/)
+[Swagger](https://sea-turtle-app-jp74n.ondigitalocean.app/swagger-ui/index.html#/)
 
