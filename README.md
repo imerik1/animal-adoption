@@ -1,17 +1,13 @@
+
 # Animal Adoption
 
-You have been hired to develop the backend for an animal adoption app. Initially, the company will integrate with its
-partners focused on [dogs](https://thedogapi.com/) and [cats](https://thecatapi.com/), but it may be extended to other
-animals in the future (It's important that the service is not aware of each partner's integration).
-
+You have been hired to develop the backend for an animal adoption app. Initially, the company will integrate with its partners focused on [dogs](https://thedogapi.com/) and [cats](https://thecatapi.com/), but it may be extended to other animals in the future (It's important that the service is not aware of each partner's integration).
 ## Pre Development
 
 Have on your machine:
-
 - [Java 17](https://openjdk.org/projects/jdk/17/)
 - [Docker](https://www.docker.com/)
 - [IDE](https://www.jetbrains.com/)
-
 ## Environment Variables
 
 To run this project without a Dockerfile, you will need to add the following environment variables:
@@ -52,3 +48,7 @@ Start the server:
   curl -v http://localhost:8080/swagger-ui/index.html#/
 ```
 
+
+## Deploy
+
+The deployment was made on the [Render](https://dashboard.render.com/) platform using a private PostgreSQL database.****
