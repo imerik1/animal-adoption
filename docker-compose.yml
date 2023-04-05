@@ -15,6 +15,10 @@ services:
     restart: always
     depends_on:
       - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/sandbox
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123
   db:
     image: postgres:latest
     restart: always
