@@ -12,6 +12,7 @@ ENV SPRING_DATASOURCE_USERNAME=$datasource_username
 ARG datasource_password
 ENV SPRING_DATASOURCE_PASSWORD=$datasource_password
 
+RUN chmod +x gradlew
 RUN ./gradlew build
 
 ENTRYPOINT ["java", "-jar", "/app/build/libs/Animal-Adoption-0.0.1-SNAPSHOT.jar"]
