@@ -7,6 +7,8 @@ import com.teste.animaladoption.models.DogModel;
 import com.teste.animaladoption.repositories.AnimalRepository;
 import com.teste.animaladoption.services.DogService;
 import com.teste.animaladoption.services.ExternalProviderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import java.util.Map;
 public class DogServiceImpl implements DogService {
     @Value("${dog_api.url}")
     private String dogApiUrl;
+    Logger logger = LoggerFactory.getLogger(DogServiceImpl.class);
     private final AnimalRepository animalRepository;
     private final ExternalProviderService externalProviderService;
 
@@ -42,14 +45,18 @@ public class DogServiceImpl implements DogService {
         externalProviderService.<List<DogModel>>get(requestUri, new ParameterizedTypeReference<List<DogModel>>() {
                 }, null)
                 .forEach((dogModel) -> {
-                    AnimalEntity animalEntity = new AnimalEntity();
-                    animalEntity.setApiId(dogModel.getId());
-                    animalEntity.setSourceImage(dogModel.getImage().getUrl());
-                    animalEntity.setName(dogModel.getName());
-                    animalEntity.setDescription(dogModel.getDescription());
-                    animalEntity.setStatus(StatusEnum.AVAILABLE);
-                    animalEntity.setCategory(CategoryEnum.DOG);
-                    animalRepository.save(animalEntity);
+                    try {
+                        AnimalEntity animalEntity = new AnimalEntity();
+                        animalEntity.setApiId(dogModel.getId());
+                        animalEntity.setSourceImage(dogModel.getImage().getUrl());
+                        animalEntity.setName(dogModel.getName());
+                        animalEntity.setDescription(dogModel.getDescription());
+                        animalEntity.setStatus(StatusEnum.AVAILABLE);
+                        animalEntity.setCategory(CategoryEnum.DOG);
+                        animalRepository.save(animalEntity);
+                    } catch (Exception ex) {
+                        logger.error(ex.getMessage());
+                    }
                 });
     }
 }

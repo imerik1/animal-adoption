@@ -8,6 +8,8 @@ import com.teste.animaladoption.models.ImageModel;
 import com.teste.animaladoption.repositories.AnimalRepository;
 import com.teste.animaladoption.services.CatService;
 import com.teste.animaladoption.services.ExternalProviderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.Map;
 public class CatServiceImpl implements CatService {
     @Value("${cat_api.url}")
     private String catApiUrl;
+    Logger logger = LoggerFactory.getLogger(CatServiceImpl.class);
     private final AnimalRepository animalRepository;
     private final ExternalProviderService externalProviderService;
 
@@ -43,22 +46,26 @@ public class CatServiceImpl implements CatService {
         externalProviderService.<List<CatModel>>get(requestUri, new ParameterizedTypeReference<List<CatModel>>() {
                 }, null)
                 .forEach((catModel) -> {
-                    AnimalEntity animalEntity = new AnimalEntity();
-                    Long id = animalRepository.findLastApiIdByCategory(CategoryEnum.CAT).orElse(0L) + 1L;
+                    try {
+                        AnimalEntity animalEntity = new AnimalEntity();
+                        Long id = animalRepository.findLastApiIdByCategory(CategoryEnum.CAT).orElse(0L) + 1L;
 
-                    URI imageRequestUri = ExternalProviderService.builderUri(catApiUrl, null, "images", catModel.getReferenceImageId());
-                    ImageModel imageModel = externalProviderService.get(imageRequestUri, new ParameterizedTypeReference<ImageModel>() {
-                    }, null);
+                        URI imageRequestUri = ExternalProviderService.builderUri(catApiUrl, null, "images", catModel.getReferenceImageId());
+                        ImageModel imageModel = externalProviderService.get(imageRequestUri, new ParameterizedTypeReference<ImageModel>() {
+                        }, null);
 
-                    catModel.setImage(imageModel);
+                        catModel.setImage(imageModel);
 
-                    animalEntity.setApiId(id);
-                    animalEntity.setSourceImage(catModel.getImage().getUrl());
-                    animalEntity.setName(catModel.getName());
-                    animalEntity.setDescription(catModel.getDescription());
-                    animalEntity.setStatus(StatusEnum.AVAILABLE);
-                    animalEntity.setCategory(CategoryEnum.CAT);
-                    animalRepository.save(animalEntity);
+                        animalEntity.setApiId(id);
+                        animalEntity.setSourceImage(catModel.getImage().getUrl());
+                        animalEntity.setName(catModel.getName());
+                        animalEntity.setDescription(catModel.getDescription());
+                        animalEntity.setStatus(StatusEnum.AVAILABLE);
+                        animalEntity.setCategory(CategoryEnum.CAT);
+                        animalRepository.save(animalEntity);
+                    } catch (Exception ex) {
+                        logger.error(ex.getMessage());
+                    }
                 });
     }
 }
